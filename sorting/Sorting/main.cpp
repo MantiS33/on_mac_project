@@ -4,7 +4,7 @@ using namespace std;
 
 
 //---bubble sorting---
-void bubble(int arr[], int n)
+void bubble(int arr[], const int& n)
 {
     int tmp = 0;
     for(int i = 0; i < n; i++)
@@ -23,10 +23,9 @@ void bubble(int arr[], int n)
 //-------------------
 
 //---selection sorting---
-void selection(int arr[], int n)
+void selection(int arr[],const int& n)
 {
     int k = 0;
-    int tmp = 0;
     for(int i = 0; i < n; i++)
     {
         k = i;
@@ -37,15 +36,13 @@ void selection(int arr[], int n)
                 k = j;
             }
         }
-        tmp = arr[i];
-        arr[i] = arr[k];
-        arr[k] = tmp;
+        swap(arr[i], arr[k]);
     }
 }
 //-----------------------
 
 //---insertion sort---
-void insertion(int arr[], int n)
+void insertion(int arr[], const int& n)
 {
     int key = 0;
     int i = 0;
@@ -64,12 +61,64 @@ void insertion(int arr[], int n)
 }
 //--------------------
 
+//---quick sort---
+int Partition(int* arr,const int& l, const int& r)
+{
+    int x = arr[r];
+    int less = l;
+    for(int i = l; i < r; ++i)
+    {
+        if(arr[i] <= x)
+        {
+            swap(arr[i], arr[less]);
+            ++less;
+        }
+        
+    }
+    swap(arr[less],arr[r]);
+    return less;
+}
+
+void QuickSortImpl(int* arr, const int& l, const int& r)
+{
+    if(l < r)
+    {
+        int q = Partition(arr, l, r);
+        QuickSortImpl(arr, l, q - 1);
+        QuickSortImpl(arr, q + 1, r);
+    }
+}
+
+void QuickSort(int* arr, const int& size)
+{
+    if(size > 0)
+    {
+        QuickSortImpl(arr, 0, size - 1);
+    }
+}
+//----------------
+
+void InizializyByArray(int* arr_one, int* arr_two, const int& size)
+{
+    for(int i = 0; i < size; ++i)
+    {
+        arr_two[i] = arr_one[i];
+    }
+}
+
+void OutArray(int* arr, const int& size)
+{
+    for(int i = 0; i < size; ++i)
+    {
+        cout << arr[i] << ' ';
+    }
+}
 
 int main(int argc, const char * argv[])
 {
     srand(static_cast<unsigned int>(time(0)));
     int n = 10;
-    int arr[n], tmpArray[n];
+    int arr[n], temp_array[n];
     
     for (int i = 0; i < n; i++)
     {
@@ -77,49 +126,31 @@ int main(int argc, const char * argv[])
     }
     cout << "Array value before sorting: "s;
     
-    for(int i = 0; i < n; i++)
-    {
-        cout << arr[i] << ' ';
-    }
+    OutArray(arr, n);
     
-    for(int i = 0; i < n; i++)
-    {
-        tmpArray[i] = arr[i];
-    }
+    InizializyByArray(arr, temp_array, n);
     cout << endl << "Array value after bubble sorting: "s;
-    bubble(tmpArray, n);
-    for(int i = 0; i < n; i++)
-    {
-        cout << tmpArray[i] << ' ';
-    }
+    bubble(temp_array, n);
+    OutArray(temp_array, n);
     
-    for(int i = 0; i < n; i++)
-    {
-        tmpArray[i] = arr[i];
-    }
+    InizializyByArray(arr, temp_array, n);
     cout << endl << "Array value after selection sorting: "s;
-    selection(tmpArray,n);
-    for(int i = 0; i < n; i++)
-    {
-        cout << tmpArray[i] << ' ';
-    }
+    selection(temp_array,n);
+    OutArray(temp_array, n);
     
-    for(int i = 0; i < n; i++)
-    {
-        tmpArray[i] = arr[i];
-    }
+    InizializyByArray(arr, temp_array, n);
     cout << endl << "Array value after insertion sorting: "s;
-    insertion(tmpArray, n);
-    for(int i = 0; i < n; i++)
-    {
-        cout << tmpArray[i] << ' ';
-    }
+    insertion(temp_array, n);
+    OutArray(temp_array, n);
+    
+    InizializyByArray(arr, temp_array, n);
+    cout << endl << "Array value before quick sort: "s;
+    QuickSort(temp_array, n);
+    OutArray(temp_array, n);
+    
     
     cout << endl;
-    for(int i = 0; i < n; i++)
-    {
-        cout << arr[i] << ' ';
-    }
+    OutArray(arr, n);
     cout << endl;
     return 0;
 }
